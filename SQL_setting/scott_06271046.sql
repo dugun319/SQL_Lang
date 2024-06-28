@@ -204,42 +204,145 @@ FROM        student s
 CROSS JOIN  department d
 ;
 
-SELECT          s.studno,
-                s.name,
-                s.weight,
-                d.dname,
-                d.loc,
-                d.deptno
-FROM            student s
-NATURAL JOIN    department d
+SELECT              s.studno,
+                    s.name,
+                    s.weight,
+                    d.dname,
+                    d.loc,
+                    d.deptno
+FROM                student s
+    NATURAL JOIN    department d
 ;
 
-SELECT          s.studno,
-                s.name,
-                s.weight,
-                d.dname,
-                d.loc,
-                deptno
-FROM            student s
-NATURAL JOIN    department d
+SELECT              s.studno,
+                    s.name,
+                    s.weight,
+                    d.dname,
+                    d.loc,
+                    deptno
+FROM                student s
+    NATURAL JOIN    department d
 ;
 
-SELECT          p.profno,
-                p.name,
-                d.dname,
-                deptno
-FROM            professor p
-NATURAL JOIN    department d
+SELECT            p.profno,
+                  p.name,
+                  d.dname,
+                  deptno
+FROM              professor p
+    NATURAL JOIN  department d
 ;
 
-SELECT          s.studno,
-                s.name,
-                s.weight,
-                s.grade,
-                d.dname,
-                d.loc,
-                deptno
+SELECT              s.studno,
+                    s.name,
+                    s.weight,
+                    s.grade,
+                    d.dname,
+                    d.loc,
+                    deptno
+FROM                student s
+    NATURAL JOIN    department d
+WHERE               s.grade = '4'
+;
+
+
+SELECT      s.studno,
+            s.name,
+            deptno,
+            dname
+FROM        student s
+    JOIN    department
+    USING   (deptno)
+;
+
+SELECT      s.name,
+            s.studno,
+            s.deptno,
+            d.dname
+FROM        student s, department d
+WHERE       s.deptno = d.deptno
+    AND     s.name LIKE('±è%')
+;
+
+SELECT      s.name,
+            s.studno,
+            deptno,
+            d.dname
+FROM        student s
+    NATURAL JOIN department d
+WHERE       s.name LIKE('±è%')
+;
+
+SELECT      s.name,
+            s.studno,
+            deptno,
+            dname
+FROM        student s
+    JOIN    department
+    USING   (deptno)
+WHERE       s.name LIKE('±è%')
+;
+
+SELECT          s.name,
+                s.studno,
+                d.deptno,
+                d.dname
 FROM            student s
-NATURAL JOIN    department d
-WHERE           s.grade = '4'
+    INNER JOIN  department d
+        ON      s.deptno = d.deptno
+WHERE       s.name LIKE('±è%')
+;
+
+CREATE TABLE "SCOTT"."SALGRADE2" 
+   (	"GRADE" NUMBER(2,0), 
+     	"LOSAL" NUMBER(5,0), 
+    	"HISAL" NUMBER(5,0)
+  );
+  
+  
+SELECT      p.profno,
+            p.name,
+            p.sal,
+            s.grade
+FROM        professor p, salgrade2 s
+WHERE       p.sal BETWEEN s.losal AND s.hisal
+;
+
+
+SELECT      s.name,
+            s.grade,
+            p.name,
+            p.position
+FROM        student s, professor p
+WHERE       s.profno = p.profno(+)
+;
+
+
+SELECT      s.name,
+            s.grade,
+            p.name,
+            p.position
+FROM        student s
+    LEFT OUTER JOIN professor p
+       ON           s.profno = p.profno
+;
+
+
+
+SELECT      s.name,
+            s.grade,
+            p.name,
+            p.position
+FROM        student s, professor p
+WHERE       s.profno(+) = p.profno
+ORDER BY    p.profno
+;
+
+SELECT      s.name,
+            s.grade,
+            p.name,
+            p.position
+FROM        student s
+    RIGHT OUTER JOIN professor p
+       ON            s.profno = p.profno
+ORDER BY    p.profno
 ;
