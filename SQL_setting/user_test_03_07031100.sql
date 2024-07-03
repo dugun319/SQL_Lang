@@ -16,16 +16,3 @@ COMMIT;
 SELECT  memo
 FROM    sampleTBL
 ;
-
-SELECT  *
-FROM    scott.emp
-;
-
--- 권한 할당이 불가
-GRANT SELECT ON scott.emp
-    TO          user_test_01
-;
-
-SELECT  *
-FROM    scott.job3
-;
