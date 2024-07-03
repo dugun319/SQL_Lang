@@ -21,15 +21,73 @@ REVOKE SELECT ON scott.job3
     FROM         user_test_02
 ;
 
--- 동의어(synonym)
--- 1. 정의 : 하나의 객체에 대해 다른 이름을 정의하는 방법
---      동의어와 별명(Alias) 차이점
---      동의어는 데이터베이스 전체에서 사용
---      별명은 해당 SQL 명령문에서만 사용
--- 2. 동의어의 종류
---   1) 전용 동의어(private synonym) 
---      객체에 대한 접근 권한을 부여 받은 사용자가 정의한 동의어로 해당 사용자만 사용
---
---   2) 공용 동의어(public sysnonym)
---      권한을 주는 사용자가 정의한 동의어로 누구나 사용
---      DBA 권한을 가진 사용자만 생성 (예 : 데이터 딕셔너리)
+
+CREATE SYNONYM privateTBL for system.privateTBL;
+
+SELECT  *
+FROM    system.privateTBL
+;
+
+SELECT  *
+FROM    privateTBL
+;
+
+DROP SYNONYM privateTBL;
+
+------------------------------------
+
+CREATE OR REPLACE FUNCTION  calTax (money IN NUMBER)
+RETURN NUMBER
+    IS
+        v_tax   NUMBER;
+    BEGIN
+        v_tax := money * 0.07;
+        RETURN (v_tax);
+    END;
+/
+
+SELECT  calTax(100)
+FROM    dual
+;
+
+
+CREATE OR REPLACE PROCEDURE insert_emp (
+                                        p_empno     IN emp.empno%TYPE,
+                                        p_ename     IN emp.ename%TYPE,
+                                        p_job       IN emp.job%TYPE,
+                                        p_mgr       IN emp.mgr%TYPE,
+                                        p_sal       IN emp.sal%TYPE,
+                                        p_deptno    IN emp.deptno%TYPE
+                                        )
+    IS
+        v_comm  emp.comm%TYPE;
+    BEGIN
+        IF          p_job = 'MANAGER'
+            THEN    v_comm := 1000;
+            ELSE    v_comm := 150;
+        END IF;
+        INSERT INTO emp(
+                        empno,
+                        ename,
+                        job,
+                        mgr,
+                        hiredate,
+                        sal,
+                        comm,
+                        deptno
+                        )
+            VALUES     (
+                        p_empno,
+                        p_ename,
+                        p_job,
+                        p_mgr,
+                        SYSDATE,
+                        p_sal,
+                        v_comm,
+                        p_deptno
+                        );
+        COMMIT;
+    END;
+/
+        
+        
