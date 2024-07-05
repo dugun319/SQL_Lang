@@ -158,12 +158,12 @@ EXEC infoEmp(51);
 
 INSERT INTO emp
     VALUES      (
-                    '2003',
-                    'ÀÌÁ¤¹Î',
-                    'CLERK',
+                    '3002',
+                    '¼ÛÇý½ã',
+                    'SALESMAN',
                     '7521',
                     SYSDATE,
-                    '3000',
+                    '3600',
                     '500',
                     '50'
                 )
@@ -328,7 +328,8 @@ IS
         
     BEGIN
         dbms_output.enable;
-        FOR emp_list IN  deptSum LOOP
+        FOR emp_list IN  deptSum
+        LOOP
             DBMS_OUTPUT.PUT_LINE('DNAME  : ' || emp_list.dname);
             DBMS_OUTPUT.PUT_LINE('NUMofP : ' || emp_list.cnt);
             DBMS_OUTPUT.PUT_LINE('sumSal : ' || emp_list.salary);
