@@ -82,12 +82,13 @@ EXEC update_empno(3, 'CLERK');
 ROLLBACK;
 
 
---    Package
+--  Package
 --  자주 사용하는 프로그램과 로직을 모듈화
 --  응용 프로그램을 쉽게 개발 할 수 있음
 --  프로그램의 처리 흐름을 노출하지 않아 보안 기능이 좋음
 --  프로그램에 대한 유지보수 작업이 편리
 --  같은 이름의 프로시저와 함수를 여러 개 생성
+--  성능이 우수하다
 
 
 -- 1.Header -->  역할 : 선언 (Interface 역할)
@@ -201,3 +202,55 @@ END emp_info;
 
 EXECUTE scott.emp_info.dept_emp_info('50');
 
+
+
+create or replace PROCEDURE deleteEMP_03 (
+                                            p_empno     IN      emp.empno%TYPE,
+                                            p_result    IN OUT  VARCHAR2
+                                          )
+-- HW_01
+-- PROCEDURE Delete_emp
+-- SQL> EXECUTE Delete_emp(5555);
+-- 사원번호 : 5555
+-- 사원이름 : 55
+-- 입 사 일 : 81/12/03
+-- 데이터 삭제 성공
+--  1. Parameter : 사번 입력
+--  2. 사번 이용해 사원번호 ,사원이름 , 입 사 일 출력
+--  3. 사번 해당하는 데이터 삭제 
+    IS
+        v_empno     emp.empno%TYPE;
+        v_ename     emp.ename%TYPE;
+        v_hiredate  emp.hiredate%TYPE;
+    BEGIN
+        SELECT  empno,
+                ename,
+                hiredate
+        INTO    v_empno,
+                v_ename,
+                v_hiredate
+        FROM    emp
+        WHERE   empno = p_empno
+        ;
+        DBMS_OUTPUT.PUT_LINE('DEL. EMPNO : ' || v_empno);
+        DBMS_OUTPUT.PUT_LINE('DEL. NAME  : ' || v_ename);
+        DBMS_OUTPUT.PUT_LINE('DEL. DATE  : ' || v_hiredate);
+        DBMS_OUTPUT.PUT_LINE('DEL. RESULT: ' || p_result);
+        DELETE FROM emp
+        WHERE empno = p_empno
+        ;
+        DBMS_OUTPUT.PUT_LINE('Data is deleted');
+        p_result := '1';
+        DBMS_OUTPUT.PUT_LINE('DEL. RESULT: ' || p_result);
+        
+    EXCEPTION
+            WHEN OTHERS THEN
+                DBMS_OUTPUT.PUT_LINE('ERROR MESSAGE : ' || SQLERRM);
+                p_result := '0';
+                DBMS_OUTPUT.PUT_LINE('DEL. RESULT: ' || p_result);
+                DBMS_OUTPUT.PUT_LINE('Delet is failed');
+    
+    END deleteEMP_03;
+/
+
+EXEC deleteEMP_03(3002,'delte');
