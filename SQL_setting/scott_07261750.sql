@@ -1,0 +1,1 @@
+SELECT NVL(MAX(re_step), 0) FROM board WHERE ref = 30;

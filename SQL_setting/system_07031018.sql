@@ -59,7 +59,45 @@ INSERT INTO systemTBL
 
 GRANT
     SELECT, UPDATE, INSERT, DELETE
-    ON   system.systemTBL
+    ON   systemTBL
     TO   user_test_04
     WITH GRANT OPTION
+;
+
+CREATE PUBLIC SYNONYM   pub_system
+    FOR                 systemTBL
+;
+
+CREATE PUBLIC SYNONYM   pub_system
+    FOR                 HELP
+;
+
+DROP PUBLIC SYNONYM pub_system;
+
+
+CREATE TABLE privateTBL (
+                        memo VARCHAR2(50)
+                        )
+;
+
+INSERT INTO privateTBL
+    VALUES  ('동해물과 백두산이')
+;
+
+INSERT INTO privateTBL
+    VALUES  ('마르고 닳도록 하느님이 보우하사')
+;
+
+GRANT
+    SELECT ON   privateTBL
+    TO          user_test_04
+;
+
+REVOKE
+    SELECT ON   privateTBL
+    FROM        user_test_04
+;
+
+CREATE PUBLIC SYNONYM   privateTBL
+    FOR                 privateTBL
 ;
